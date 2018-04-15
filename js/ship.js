@@ -1,7 +1,8 @@
 class Ship {
-	constructor(x, y, size, speed = 3){
+	constructor(x, y, width, height, speed = 3){
 		this.position = createVector(x, y);
-		this.size = size;
+		this.width = width;
+		this.height = height;
 		this.moving = createVector(0, 0);
 		this.firing = 0;
 		this.life = 100;
@@ -11,7 +12,8 @@ class Ship {
 		this.isDead = false;
 		this.tempoBullet = 0;
 		this.cannonPos = createVector(0, 0);
-		this.cannonLength = floor(this.size - 6);
+		this.cannonLength = floor(this.height / 2);
+		this.angle = 0;
 	}
 
 	keyEvent(keyCode, value) {
@@ -53,9 +55,9 @@ class Ship {
 	update(){
 		this.move();
 		let direction = createVector(mouseX, mouseY);
-		let angle = atan2(direction.y-this.position.y, direction.x-this.position.x) - HALF_PI;
-		this.cannonPos.x = this.position.x - this.cannonLength * sin(angle);
-		this.cannonPos.y = this.position.y + this.cannonLength * cos(angle);
+		this.angle = atan2(direction.y-this.position.y, direction.x-this.position.x) - HALF_PI;
+		this.cannonPos.x = this.position.x - this.cannonLength * sin(this.angle);
+		this.cannonPos.y = this.position.y + this.cannonLength * cos(this.angle);
 	}
 
 	move(){
@@ -103,9 +105,16 @@ class Ship {
 	show(){
 		noStroke();
 		ellipseMode(CENTER);
+		rectMode(CENTER);
+		imageMode(CENTER);
 		fill(120, 0, 30);
-		ellipse(this.position.x,this.position.y, this.size * 2);
+		push();
+		translate(this.position.x, this.position.y);
+		rotate(this.angle - PI);
+		// rect(0,0, this.width, this.height);
+		image(shipTexture, 0, 0, 50, 50);
+		pop();
 		fill(255);
-		ellipse(this.cannonPos.x, this.cannonPos.y, 16);
+		// ellipse(this.cannonPos.x, this.cannonPos.y, 16);
 	}
 }

@@ -1,16 +1,22 @@
 var ship;
 var monsters = [];
 var tempoBullet;
+var preloaded = false;
+var shiptexture;
+
+function preload() {
+		shipTexture = loadImage('ship.png');
+		preloaded = true;
+}
 
 function setup() {
 	createCanvas(800,500);
 	background(0);
-
-	ship = new Ship(floor(width / 2), 360, 20);
+	ship = new Ship(floor(width / 2), 360, 30, 45);
 	setInterval(createMonsters, 2000);
 	setInterval(() => ship.update(), 10);
+	setInterval(() => ship.updateBullets(), 20);
 	setInterval(updateMonsters, 20);
-	setInterval(updateBullets, 20);
 	setInterval(bulletMonsterIntersect, 20);
 	textSize(18);
 }
@@ -29,10 +35,6 @@ function draw() {
 	text('Weapon : ' + (ship.bulletType + 1), 5, 20);
 	text('life : ' + ship.life, 5, 40);
 	text('Monsters : ' + monsters.length, 5, 60);
-}
-
-function updateBullets() {
-	ship.updateBullets();
 }
 
 function updateMonsters() {
@@ -60,30 +62,40 @@ function bulletMonsterIntersect() {
 }
 
 function keyPressed(e) {
-	if(keyBindings.filter(x => x == keyCode).length) {
-		e.preventDefault();
+	if (preloaded){
+		if(keyBindings.filter(x => x == keyCode).length) {
+			e.preventDefault();
+		}
+		ship.keyEvent(keyCode, ship.speed);
 	}
-	ship.keyEvent(keyCode, ship.speed);
 }
 
 function keyReleased() {
-	ship.keyEvent(keyCode, -ship.speed);
+	if(preloaded){
+		ship.keyEvent(keyCode, -ship.speed);
+	}
 }
 
 function mousePressed() {
-	ship.keyEvent(SPACEBAR, ship.speed);
+	if(preloaded){
+		ship.keyEvent(SPACEBAR, ship.speed);
+	}
 }
 
 function mouseReleased() {
-	ship.keyEvent(SPACEBAR, -ship.speed);
+	if(preloaded){
+		ship.keyEvent(SPACEBAR, -ship.speed);
+	}
 }
 
 function mouseWheel(e) {
-	if(ship.bulletType === 0){
-		ship.bulletType = NUM_BULLET_TYPES;
+	if(preloaded){
+		if(ship.bulletType === 0){
+			ship.bulletType = NUM_BULLET_TYPES;
+		}
+		ship.bulletType += e.delta < 0 ? -1 : 1;
+		ship.bulletType %= NUM_BULLET_TYPES;
 	}
-	ship.bulletType += e.delta < 0 ? -1 : 1;
-	ship.bulletType %= NUM_BULLET_TYPES;
 }
 
 function createMonsters() {
