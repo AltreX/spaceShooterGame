@@ -1,12 +1,12 @@
 class Bullet {
-	constructor(x, y, type = 0,speed = 8){
+	constructor(x, y, dirX, dirY, type = 0,speed = 8, size = 6, damage = 10){
 		this.position = createVector(x, y);
 		this.origin = createVector(x, y);
-		this.direction = createVector(mouseX, mouseY);
+		this.direction = createVector(dirX, dirY);
 		this.angle = atan2(this.direction.y-this.position.y, this.direction.x-this.position.x) - HALF_PI;
-		this.damage = 10;
+		this.damage = damage;
 		this.speed = speed;
-		this.size = 6;
+		this.size = size;
 		this.toDelete = false;
 		this.type = type;
 	}
@@ -41,8 +41,8 @@ class Bullet {
 	}
 
 	show(){
+		noStroke();
 		ellipseMode(CENTER);
-		fill(200,75,20);
 		ellipse(this.position.x, this.position.y, this.size * 2, this.size * 2);
 	}
 }

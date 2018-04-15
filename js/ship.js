@@ -62,10 +62,10 @@ class Ship {
 
 	move(){
 		let limiter = createVector(0, 0)
-		limiter.x += this.position.x - floor(this.size) >= 0 ? 0 : this.speed;
-		limiter.x += this.position.x + floor(this.size) <= width ? 0 : -this.speed;
-		limiter.y += this.position.y - floor(this.size) >= 0 ? 0 : this.speed;
-		limiter.y += this.position.y + floor(this.size) <= height ? 0 : -this.speed;
+		limiter.x += this.position.x - floor(this.width) >= 0 ? 0 : this.speed;
+		limiter.x += this.position.x + floor(this.width) <= width ? 0 : -this.speed;
+		limiter.y += this.position.y - floor(this.height) >= 0 ? 0 : this.speed;
+		limiter.y += this.position.y + floor(this.height) <= height ? 0 : -this.speed;
 		this.position.add(limiter);
 		this.position.add(this.moving);
 	}
@@ -74,23 +74,23 @@ class Ship {
 		if (this.firing && this.tempoBullet <= 0) {
 			switch(abs(this.bulletType)) {
 				case 0:
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY));
 					break;
 				case 1:
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 1));
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 2));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 1));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 2));
 					break;
 				case 2:
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 0));
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 1));
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 2));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 0));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 1));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 2));
 					break;
 				case 3:
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 0));
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 1));
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 2));
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 3));
-					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, 4));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 0));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 1));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 2));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 3));
+					this.bullets.push(new Bullet(this.cannonPos.x, this.cannonPos.y, mouseX, mouseY, 4));
 					break;
 			}
 			this.tempoBullet = 10;
@@ -103,18 +103,11 @@ class Ship {
 	}
 
 	show(){
-		noStroke();
-		ellipseMode(CENTER);
-		rectMode(CENTER);
 		imageMode(CENTER);
-		fill(120, 0, 30);
 		push();
 		translate(this.position.x, this.position.y);
 		rotate(this.angle - PI);
-		// rect(0,0, this.width, this.height);
 		image(shipTexture, 0, 0, 50, 50);
 		pop();
-		fill(255);
-		// ellipse(this.cannonPos.x, this.cannonPos.y, 16);
 	}
 }
